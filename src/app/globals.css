@@ -1,26 +1,159 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
+  --background: #f6f9ff;
   --foreground: #171717;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #e2e8f0;
+  color-scheme: dark;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --font-sans: var(--font-inter);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: #7C3AED;
+  --color-primary-hover: #6D28D9;
+  --color-primary-active: #5B21B6;
+  --color-primary-50: #F5F3FF;
+  --color-primary-100: #EDE9FE;
+
+  --color-accent: #3B82F6;
+  --color-accent-hover: #2563EB;
+  --color-accent-50: #EFF6FF;
+  --color-accent-100: #DBEAFE;
+
+  --color-table-header: #EEF2FF;
+  --color-row-hover: #F5F3FF;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system,
+    Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.table-row-hover {
+  transition: background-color 200ms ease;
+}
+
+.table-row-hover:hover {
+  background-color: var(--color-row-hover);
+}
+
+/* ── Dark-mode overrides ── */
+
+.dark .text-slate-900 {
+  color: #f1f5f9;
+}
+.dark .text-slate-700 {
+  color: #cbd5e1;
+}
+.dark .text-slate-600 {
+  color: #94a3b8;
+}
+.dark .text-slate-500 {
+  color: #94a3b8;
+}
+
+.dark .bg-white {
+  background-color: #1e293b;
+}
+.dark .bg-slate-50 {
+  background-color: #162032;
+}
+.dark .bg-table-header {
+  background-color: #1e3150;
+  border-bottom: 1px solid #334d6e;
+}
+.dark .bg-primary-50 {
+  background-color: rgba(124, 58, 237, 0.15);
+}
+.dark .bg-accent-50 {
+  background-color: rgba(59, 130, 246, 0.15);
+}
+
+.dark .border-slate-200 {
+  border-color: #334155;
+}
+.dark .border-slate-100 {
+  border-color: #1e293b;
+}
+.dark .ring-slate-100 {
+  --tw-ring-color: #334155;
+}
+
+.dark .divide-slate-100 > :not(:first-child) {
+  border-color: #334155;
+}
+.dark .divide-slate-200 > :not(:first-child) {
+  border-color: #475569;
+}
+
+.prose-blog {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: #334155;
+}
+.dark .prose-blog {
+  color: #cbd5e1;
+}
+.prose-blog h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+.dark .prose-blog h2 {
+  color: #f1f5f9;
+}
+.prose-blog h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.dark .prose-blog h3 {
+  color: #e2e8f0;
+}
+.prose-blog p {
+  margin-bottom: 1rem;
+}
+.prose-blog ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+.prose-blog ul li {
+  margin-bottom: 0.375rem;
+}
+.prose-blog strong {
+  font-weight: 600;
+  color: #0f172a;
+}
+.dark .prose-blog strong {
+  color: #f1f5f9;
+}
+.prose-blog a {
+  color: #7C3AED;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-blog a:hover {
+  color: #6D28D9;
+}
+
+.dark .table-row-hover:hover {
+  background-color: rgba(124, 58, 237, 0.08);
 }
