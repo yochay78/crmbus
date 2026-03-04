@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "CRMBUS — AI CRM Comparisons",
+  title: "Best AI CRM Software Compared (2026) | CRMBUS",
   description:
     "We compare leading AI CRM platforms to help you automate lead flow and grow revenue in 2026.",
 };
