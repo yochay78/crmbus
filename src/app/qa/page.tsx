@@ -86,6 +86,12 @@ export default function QaPage() {
             >
               Reviews
             </a>
+            <a
+              href="/industries"
+              className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
+            >
+              Industries
+            </a>
             <ThemeToggle />
             <CtaButton href="/#top-crms" size="sm" className="hidden sm:inline-flex">
               View Top Picks

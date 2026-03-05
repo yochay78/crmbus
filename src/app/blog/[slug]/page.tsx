@@ -73,6 +73,12 @@ export default async function BlogPostPage(props: {
               Reviews
             </a>
             <a
+              href="/industries"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Industries
+            </a>
+            <a
               href="/blog"
               className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
             >

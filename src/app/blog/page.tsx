@@ -54,6 +54,12 @@ export default function BlogIndexPage() {
             >
               Reviews
             </a>
+            <a
+              href="/industries"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Industries
+            </a>
             <ThemeToggle />
             <CtaButton href="/#top-crms" size="sm" className="hidden sm:inline-flex">
               View Top Picks

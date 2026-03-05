@@ -39,6 +39,12 @@ export default function Home() {
               Reviews
             </a>
             <a
+              href="/industries"
+              className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
+            >
+              Industries
+            </a>
+            <a
               href="/blog"
               className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
             >
@@ -326,7 +332,13 @@ export default function Home() {
 
       <footer className="border-t border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
         <div className="mx-auto w-full max-w-6xl px-4 py-10 text-sm text-slate-600 dark:text-slate-400 sm:px-6">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            <a href="/reviews" className="font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Reviews</a>
+            <a href="/industries" className="font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Industries</a>
+            <a href="/blog" className="font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Blog</a>
+            <a href="/qa" className="font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Q&A</a>
+          </div>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-3xl">
               CRMBUS.com is a professional review site that may receive
               compensation from the companies whose products we review.
