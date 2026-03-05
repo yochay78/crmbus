@@ -1,5 +1,6 @@
 import { MessageSquareText, Sparkles } from "lucide-react";
 import { CtaButton } from "@/components/CtaButton";
+import { JsonLd } from "@/components/JsonLd";
 import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const metadata = {
@@ -59,9 +60,23 @@ const QUESTIONS = [
   },
 ];
 
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: QUESTIONS.map((q) => ({
+    "@type": "Question",
+    name: q.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: q.answer,
+    },
+  })),
+};
+
 export default function QaPage() {
   return (
     <div className="min-h-screen bg-transparent">
+      <JsonLd data={faqJsonLd} />
       <div className="absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(ellipse_at_top,rgba(79,70,229,0.14),rgba(255,255,255,0))] dark:bg-[radial-gradient(ellipse_at_top,rgba(79,70,229,0.25),rgba(0,0,0,0))]" />
 
       <header className="sticky top-0 z-20 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-700/70 dark:bg-slate-900/80">

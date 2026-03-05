@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ChevronLeft, Sparkles, TrendingUp } from "lucide-react";
 import { CtaButton } from "@/components/CtaButton";
+import { JsonLd } from "@/components/JsonLd";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { RedCirclePlayer } from "@/components/RedCirclePlayer";
 import {
   BLOG_POSTS,
   CATEGORY_LABELS,
@@ -46,8 +48,39 @@ export default async function BlogPostPage(props: {
     .filter((p) => p.slug !== post.slug)
     .slice(0, 3);
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { "@type": "Organization", name: "CRMBUS" },
+    publisher: {
+      "@type": "Organization",
+      name: "CRMBUS",
+      url: "https://www.crmbus.com",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.crmbus.com/blog/${post.slug}`,
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.crmbus.com" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://www.crmbus.com/blog" },
+      { "@type": "ListItem", position: 3, name: post.title },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-transparent">
+      <JsonLd data={articleJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.12),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.10),transparent_60%)] dark:bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.2),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.15),transparent_60%)]" />
 
       <header className="sticky top-0 z-20 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-700/70 dark:bg-slate-900/80">
@@ -124,6 +157,32 @@ export default async function BlogPostPage(props: {
 
           <div className="grid gap-8 lg:grid-cols-12">
             <article className="lg:col-span-8">
+              {post.youtubeId && (
+                <div className="mb-6 overflow-hidden rounded-3xl border border-slate-200 shadow-sm dark:border-slate-700">
+                  <div className="relative pb-[56.25%]">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${post.youtubeId}`}
+                      title={post.title}
+                      className="absolute inset-0 h-full w-full border-0"
+                      allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              )}
+
+              {post.podcastShowId && post.podcastEpisodeId && (
+                <div className="mb-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-8">
+                  <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
+                    Listen to the Podcast
+                  </h2>
+                  <RedCirclePlayer
+                    showId={post.podcastShowId}
+                    episodeId={post.podcastEpisodeId}
+                  />
+                </div>
+              )}
+
               <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-10">
                 <div
                   className="prose-blog"

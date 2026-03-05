@@ -9,6 +9,7 @@ import {
   X,
 } from "lucide-react";
 import { CtaButton } from "@/components/CtaButton";
+import { JsonLd } from "@/components/JsonLd";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CRMS, LONG_REVIEWS, type CrmSlug, getCrmBySlug } from "@/lib/crms";
 
@@ -44,8 +45,54 @@ export default async function ReviewPage(props: {
     { id: "faq", label: "FAQ" },
   ];
 
+  const softwareJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: crm.name,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    offers: {
+      "@type": "Offer",
+      price: crm.pricingStart.replace(/[^0-9.]/g, "").split(".")[0] || "0",
+      priceCurrency: "USD",
+      priceValidUntil: "2026-12-31",
+    },
+    review: {
+      "@type": "Review",
+      author: { "@type": "Organization", name: "CRMBUS" },
+      reviewBody: review.tlDr,
+      publisher: { "@type": "Organization", name: "CRMBUS" },
+    },
+  };
+
+  const faqJsonLd = review.faqs.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: review.faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  } : null;
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.crmbus.com" },
+      { "@type": "ListItem", position: 2, name: "Reviews", item: "https://www.crmbus.com/reviews" },
+      { "@type": "ListItem", position: 3, name: `${crm.name} Review` },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-transparent">
+      <JsonLd data={softwareJsonLd} />
+      {faqJsonLd && <JsonLd data={faqJsonLd} />}
+      <JsonLd data={breadcrumbJsonLd} />
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.12),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.10),transparent_60%)] dark:bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.2),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.15),transparent_60%)]" />
 
       <header className="sticky top-0 z-20 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-700/70 dark:bg-slate-900/80">

@@ -8,6 +8,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { CtaButton } from "@/components/CtaButton";
+import { JsonLd } from "@/components/JsonLd";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { INDUSTRIES, getIndustryBySlug } from "@/lib/industries";
 import { CRMS, type Crm } from "@/lib/crms";
@@ -44,8 +45,37 @@ export default async function IndustryPage(props: {
 
   const relevantCrms = getRelevantCrms(industry);
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: `Best AI CRM for ${industry.title} (2026)`,
+    description: industry.description,
+    author: { "@type": "Organization", name: "CRMBUS" },
+    publisher: {
+      "@type": "Organization",
+      name: "CRMBUS",
+      url: "https://www.crmbus.com",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.crmbus.com/industries/${industry.slug}`,
+    },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://www.crmbus.com" },
+      { "@type": "ListItem", position: 2, name: "Industries", item: "https://www.crmbus.com/industries" },
+      { "@type": "ListItem", position: 3, name: industry.title },
+    ],
+  };
+
   return (
     <div className="min-h-screen bg-transparent">
+      <JsonLd data={articleJsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.12),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.10),transparent_60%)] dark:bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.2),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.15),transparent_60%)]" />
 
       <header className="sticky top-0 z-20 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-700/70 dark:bg-slate-900/80">

@@ -1,5 +1,6 @@
 import { Sparkles } from "lucide-react";
 import { CtaButton } from "@/components/CtaButton";
+import { JsonLd } from "@/components/JsonLd";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CRMS } from "@/lib/crms";
 
@@ -9,9 +10,24 @@ export const metadata = {
     "Long-form reviews of leading AI CRM platforms to help you choose the best fit for your workflow in 2026.",
 };
 
+const itemListJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Best AI CRM Software Reviews (2026)",
+  description: "Long-form reviews of leading AI CRM platforms.",
+  numberOfItems: CRMS.length,
+  itemListElement: CRMS.map((crm, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: crm.name,
+    url: `https://www.crmbus.com/reviews/${crm.slug}`,
+  })),
+};
+
 export default function ReviewsIndexPage() {
   return (
     <div className="min-h-screen bg-transparent">
+      <JsonLd data={itemListJsonLd} />
       <div className="absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.12),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.10),transparent_60%)] dark:bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.2),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.15),transparent_60%)]" />
 
       <header className="sticky top-0 z-20 border-b border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-700/70 dark:bg-slate-900/80">

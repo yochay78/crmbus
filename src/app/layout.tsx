@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import { JsonLd } from "@/components/JsonLd";
 import "./globals.css";
 
 const inter = Inter({
@@ -23,6 +24,31 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "CRMBUS",
+            url: "https://www.crmbus.com",
+            description:
+              "We compare leading AI CRM platforms to help you automate lead flow and grow revenue in 2026.",
+            potentialAction: {
+              "@type": "SearchAction",
+              target: "https://www.crmbus.com/?q={search_term_string}",
+              "query-input": "required name=search_term_string",
+            },
+          }}
+        />
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "CRMBUS",
+            url: "https://www.crmbus.com",
+            description:
+              "Professional review site comparing AI-powered CRM software platforms.",
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme:dark)").matches))document.documentElement.classList.add("dark")})()`,

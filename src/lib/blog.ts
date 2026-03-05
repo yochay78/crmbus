@@ -8,6 +8,9 @@ export type BlogPost = {
   category: BlogCategory;
   tags: string[];
   content: string;
+  youtubeId?: string;
+  podcastShowId?: string;
+  podcastEpisodeId?: string;
 };
 
 export const CATEGORY_LABELS: Record<BlogCategory, string> = {
@@ -495,6 +498,9 @@ export const BLOG_POSTS: readonly BlogPost[] = [
     date: "2026-01-08",
     category: "guide",
     tags: ["trials", "evaluation", "playbook"],
+    youtubeId: "hnq_rlACmhc",
+    podcastShowId: "3c30275c-667f-4329-94b0-74b210c86bd4",
+    podcastEpisodeId: "d54179bf-1152-4509-aef4-a5ceffccf536",
     content: `
 <p>Most people sign up for a CRM trial, click around for a day, get distracted, and let it expire. That tells you nothing about whether the tool will actually improve your sales process. Here's a structured 14-day playbook to evaluate any CRM properly.</p>
 
