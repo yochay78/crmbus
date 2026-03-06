@@ -11,7 +11,7 @@ import {
 import { CtaButton } from "@/components/CtaButton";
 import type { Crm } from "@/lib/crms";
 
-const INITIAL_COUNT = 5;
+const INITIAL_COUNT = 4;
 
 export function CrmTableSection({ crms }: { crms: readonly Crm[] }) {
   const [expanded, setExpanded] = useState(false);

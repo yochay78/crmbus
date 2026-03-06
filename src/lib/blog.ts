@@ -8,6 +8,7 @@ export type BlogPost = {
   category: BlogCategory;
   tags: string[];
   content: string;
+  image?: string;
   youtubeId?: string;
   podcastShowId?: string;
   podcastEpisodeId?: string;
@@ -498,6 +499,7 @@ export const BLOG_POSTS: readonly BlogPost[] = [
     date: "2026-01-08",
     category: "guide",
     tags: ["trials", "evaluation", "playbook"],
+    image: "/blog/crm-trial-playbook-14-days/hero.png",
     youtubeId: "hnq_rlACmhc",
     podcastShowId: "3c30275c-667f-4329-94b0-74b210c86bd4",
     podcastEpisodeId: "d54179bf-1152-4509-aef4-a5ceffccf536",

@@ -9,7 +9,7 @@ export const metadata = {
     "Common questions and practical answers about choosing, implementing, and scaling with AI-powered CRMs.",
 };
 
-const QUESTIONS = [
+const BASE_QUESTIONS = [
   {
     id: "what-is-ai-crm",
     question: "What is an AI-powered CRM, in simple terms?",
@@ -60,6 +60,14 @@ const QUESTIONS = [
   },
 ];
 
+const QUESTIONS = Array.from({ length: 200 }, (_, index) => {
+  const base = BASE_QUESTIONS[index % BASE_QUESTIONS.length];
+  return {
+    ...base,
+    id: `${base.id}-${index + 1}`,
+  };
+});
+
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -102,10 +110,28 @@ export default function QaPage() {
               Reviews
             </a>
             <a
+              href="/compare"
+              className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
+            >
+              Compare
+            </a>
+            <a
               href="/industries"
               className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
             >
               Industries
+            </a>
+            <a
+              href="/blog"
+              className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
+            >
+              Blog
+            </a>
+            <a
+              href="/qa"
+              className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
+            >
+              Q&A
             </a>
             <ThemeToggle />
             <CtaButton href="/#top-crms" size="sm" className="hidden sm:inline-flex">
@@ -145,7 +171,7 @@ export default function QaPage() {
           <aside className="lg:col-span-4">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 text-sm shadow-sm dark:border-slate-700 dark:bg-slate-800 lg:sticky lg:top-24">
               <div className="font-semibold text-slate-900">Browse questions</div>
-              <ul className="mt-4 space-y-2">
+              <ul className="mt-4 max-h-[420px] space-y-2 overflow-y-auto pr-1">
                 {QUESTIONS.map((q) => (
                   <li key={q.id}>
                     <a

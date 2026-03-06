@@ -12,6 +12,8 @@ import { CRMS, HOME_REVIEWS } from "@/lib/crms";
 import { getAllPosts, CATEGORY_LABELS } from "@/lib/blog";
 
 export default function Home() {
+  const TOP_CRMS = CRMS.slice(0, 4);
+
   return (
     <div className="min-h-screen bg-transparent">
       <div className="absolute inset-x-0 top-0 -z-10 h-[520px] bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.12),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.10),transparent_60%)] dark:bg-[radial-gradient(ellipse_at_top_left,rgba(124,58,237,0.2),transparent_60%),radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.15),transparent_60%)]" />
@@ -39,6 +41,12 @@ export default function Home() {
               Reviews
             </a>
             <a
+              href="/compare"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Compare
+            </a>
+            <a
               href="/industries"
               className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
             >
@@ -49,6 +57,12 @@ export default function Home() {
               className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
             >
               Blog
+            </a>
+            <a
+              href="/qa"
+              className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
+            >
+              Q&A
             </a>
             <ThemeToggle />
             <CtaButton href="#top-crms" size="sm" className="hidden sm:inline-flex">
@@ -146,7 +160,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="mt-6">
-                  <CtaButton href="#top-crms" className="w-full justify-center">
+                  <CtaButton href="/compare" className="w-full justify-center">
                     View the comparison table
                   </CtaButton>
                 </div>
@@ -169,9 +183,12 @@ export default function Home() {
                 standout AI capability, and how to try it.
               </p>
             </div>
+            <CtaButton href="/compare" variant="secondary" size="sm" className="self-start sm:self-auto">
+              Compare all {CRMS.length} CRMs
+            </CtaButton>
           </div>
 
-          <CrmTableSection crms={CRMS} />
+          <CrmTableSection crms={TOP_CRMS} />
         </section>
 
         <section
@@ -189,7 +206,7 @@ export default function Home() {
           </div>
 
           <CrmReviewsList
-            entries={CRMS.flatMap((crm) => {
+            entries={TOP_CRMS.flatMap((crm) => {
               const review = HOME_REVIEWS[crm.slug];
               return review ? [{ crm, review }] : [];
             })}
@@ -278,9 +295,14 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-              <CtaButton href="#top-crms" className="justify-center">
-                View Top Picks
-              </CtaButton>
+              <div className="flex flex-wrap items-center gap-3">
+                <CtaButton href="#top-crms" className="justify-center">
+                  View Top Picks
+                </CtaButton>
+                <CtaButton href="/compare" variant="secondary" className="justify-center">
+                  Compare all CRMs
+                </CtaButton>
+              </div>
             </div>
           </div>
         </section>
@@ -334,6 +356,7 @@ export default function Home() {
         <div className="mx-auto w-full max-w-6xl px-4 py-10 text-sm text-slate-600 dark:text-slate-400 sm:px-6">
           <div className="flex flex-wrap gap-x-6 gap-y-2">
             <a href="/reviews" className="font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Reviews</a>
+            <a href="/compare" className="font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Compare</a>
             <a href="/industries" className="font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Industries</a>
             <a href="/blog" className="font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Blog</a>
             <a href="/qa" className="font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white">Q&A</a>

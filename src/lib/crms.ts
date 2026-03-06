@@ -253,6 +253,14 @@ export const CRMS: readonly Crm[] = [
   },
 ] as const;
 
+/** HighLevel first, then affiliate partners (keap, centripe, capsule). Always shown at top of compare table. */
+export const FEATURED_TOP_SLUGS: readonly CrmSlug[] = [
+  "highlevel",
+  "keap",
+  "centripe",
+  "capsule",
+];
+
 export function getCrmBySlug(slug: string) {
   return CRMS.find((c) => c.slug === slug);
 }

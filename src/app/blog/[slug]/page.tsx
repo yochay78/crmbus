@@ -5,6 +5,7 @@ import { CtaButton } from "@/components/CtaButton";
 import { JsonLd } from "@/components/JsonLd";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { RedCirclePlayer } from "@/components/RedCirclePlayer";
+import { getMedia, extractYouTubeId, parseRedcircleIds } from "@/lib/media";
 import {
   BLOG_POSTS,
   CATEGORY_LABELS,
@@ -37,12 +38,48 @@ function formatDate(iso: string) {
   });
 }
 
+function injectVideoIntoContent(html: string, youtubeId: string | null): string {
+  if (!youtubeId) return html;
+
+  const embed = `
+<div>
+  <iframe
+    src="https://www.youtube.com/embed/${youtubeId}"
+    title="Article video"
+    width="560"
+    height="315"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
+</div>
+`;
+
+  const firstParagraphEnd = html.indexOf("</p>");
+  if (firstParagraphEnd === -1) {
+    return embed + html;
+  }
+
+  const insertPosition = firstParagraphEnd + "</p>".length;
+  return html.slice(0, insertPosition) + embed + html.slice(insertPosition);
+}
+
 export default async function BlogPostPage(props: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await props.params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
+
+  const media = getMedia("blog", post.slug);
+  const youtubeId = media?.youtubeUrl
+    ? extractYouTubeId(media.youtubeUrl)
+    : null;
+  const podcastIds = media?.podcastUrl
+    ? parseRedcircleIds(media.podcastUrl)
+    : null;
+
+  const contentHtml = injectVideoIntoContent(post.content, youtubeId);
 
   const related = getAllPosts()
     .filter((p) => p.slug !== post.slug)
@@ -106,6 +143,12 @@ export default async function BlogPostPage(props: {
               Reviews
             </a>
             <a
+              href="/compare"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Compare
+            </a>
+            <a
               href="/industries"
               className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
             >
@@ -116,6 +159,12 @@ export default async function BlogPostPage(props: {
               className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
             >
               Blog
+            </a>
+            <a
+              href="/qa"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Q&A
             </a>
             <ThemeToggle />
             <CtaButton href="/#top-crms" size="sm" className="hidden sm:inline-flex">
@@ -157,28 +206,12 @@ export default async function BlogPostPage(props: {
 
           <div className="grid gap-8 lg:grid-cols-12">
             <article className="lg:col-span-8">
-              {post.youtubeId && (
+              {media?.image && (
                 <div className="mb-6 overflow-hidden rounded-3xl border border-slate-200 shadow-sm dark:border-slate-700">
-                  <div className="relative pb-[56.25%]">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${post.youtubeId}`}
-                      title={post.title}
-                      className="absolute inset-0 h-full w-full border-0"
-                      allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
-                      allowFullScreen
-                    />
-                  </div>
-                </div>
-              )}
-
-              {post.podcastShowId && post.podcastEpisodeId && (
-                <div className="mb-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-8">
-                  <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-white">
-                    Listen to the Podcast
-                  </h2>
-                  <RedCirclePlayer
-                    showId={post.podcastShowId}
-                    episodeId={post.podcastEpisodeId}
+                  <img
+                    src={media.image}
+                    alt={post.title}
+                    className="h-auto w-full object-cover"
                   />
                 </div>
               )}
@@ -186,22 +219,34 @@ export default async function BlogPostPage(props: {
               <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-10">
                 <div
                   className="prose-blog"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
+                  dangerouslySetInnerHTML={{ __html: contentHtml }}
                 />
               </div>
 
+              {podcastIds && (
+                <section className="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                  <h2 className="mb-3 text-base font-semibold text-slate-900 dark:text-white">
+                    Listen to the Podcast
+                  </h2>
+                  <RedCirclePlayer
+                    showId={podcastIds.showId}
+                    episodeId={podcastIds.episodeId}
+                  />
+                </section>
+              )}
+
               {/* Mid-article CTA */}
-              <div className="mt-6 rounded-3xl border border-primary-100 bg-gradient-to-r from-primary-50/60 to-accent-50/60 p-6 dark:border-primary-100/30 sm:p-8">
+              <div className="mt-6 rounded-3xl border border-primary-100 bg-gradient-to-r from-primary-50/60 to-accent-50/60 p-6 dark:border-slate-700 dark:from-slate-800 dark:to-slate-800 sm:p-8">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-start gap-3">
                     <div className="rounded-2xl bg-white p-3 text-primary shadow-sm dark:bg-slate-800">
                       <Sparkles className="h-6 w-6" aria-hidden="true" />
                     </div>
                     <div>
-                      <div className="text-base font-semibold text-slate-900">
+                      <div className="text-base font-semibold text-slate-900 dark:text-white">
                         Ready to compare platforms?
                       </div>
-                      <p className="mt-1 text-sm text-slate-600">
+                      <p className="mt-1 text-sm text-slate-600 dark:text-slate-100">
                         See our Big 4 comparison table and start a free trial
                         today.
                       </p>
@@ -287,7 +332,7 @@ export default async function BlogPostPage(props: {
             </section>
           )}
 
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
+          <div className="mt-4 rounded-3xl border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">
             CRMBUS.com is a professional review site that may receive
             compensation from the companies whose products we review.
           </div>

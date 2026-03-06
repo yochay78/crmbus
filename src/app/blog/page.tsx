@@ -2,6 +2,7 @@ import { Sparkles } from "lucide-react";
 import { CtaButton } from "@/components/CtaButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { getAllPosts, CATEGORY_LABELS, type BlogCategory } from "@/lib/blog";
+import { getMedia } from "@/lib/media";
 
 export const metadata = {
   title: "Blog — CRMBUS",
@@ -55,10 +56,22 @@ export default function BlogIndexPage() {
               Reviews
             </a>
             <a
+              href="/compare"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Compare
+            </a>
+            <a
               href="/industries"
               className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
             >
               Industries
+            </a>
+            <a
+              href="/qa"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Q&A
             </a>
             <ThemeToggle />
             <CtaButton href="/#top-crms" size="sm" className="hidden sm:inline-flex">
@@ -95,31 +108,46 @@ export default function BlogIndexPage() {
         </div>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => (
-            <a
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              className="group flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
-            >
-              <div className="flex items-center gap-2">
-                <span className="rounded-full border border-primary-100 bg-primary-50 px-2.5 py-0.5 text-xs font-medium text-primary">
-                  {CATEGORY_LABELS[post.category]}
-                </span>
-                <span className="text-xs text-slate-500">
-                  {formatDate(post.date)}
-                </span>
-              </div>
-              <h2 className="mt-3 text-base font-semibold leading-snug text-slate-900 group-hover:text-primary">
-                {post.title}
-              </h2>
-              <p className="mt-2 flex-1 text-sm leading-6 text-slate-600">
-                {post.excerpt}
-              </p>
-              <div className="mt-4 text-sm font-medium text-primary group-hover:text-primary-hover">
-                Read article →
-              </div>
-            </a>
-          ))}
+          {posts.map((post) => {
+            const media = getMedia("blog", post.slug);
+
+            return (
+              <a
+                key={post.slug}
+                href={`/blog/${post.slug}`}
+                className="group flex flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
+              >
+                {media?.image && (
+                  <div className="aspect-[16/9] overflow-hidden">
+                    <img
+                      src={media.image}
+                      alt=""
+                      className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
+                    />
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col p-6">
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-full border border-primary-100 bg-primary-50 px-2.5 py-0.5 text-xs font-medium text-primary">
+                      {CATEGORY_LABELS[post.category]}
+                    </span>
+                    <span className="text-xs text-slate-500">
+                      {formatDate(post.date)}
+                    </span>
+                  </div>
+                  <h2 className="mt-3 text-base font-semibold leading-snug text-slate-900 group-hover:text-primary dark:text-white">
+                    {post.title}
+                  </h2>
+                  <p className="mt-2 flex-1 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                    {post.excerpt}
+                  </p>
+                  <div className="mt-4 text-sm font-medium text-primary group-hover:text-primary-hover">
+                    Read article →
+                  </div>
+                </div>
+              </a>
+            );
+          })}
         </div>
 
         <div className="mt-12 rounded-3xl border border-slate-200 bg-white p-6 text-sm text-slate-600 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400">

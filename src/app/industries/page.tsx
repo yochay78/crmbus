@@ -37,10 +37,22 @@ export default function IndustriesIndexPage() {
               Reviews
             </a>
             <a
+              href="/compare"
+              className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
+            >
+              Compare
+            </a>
+            <a
               href="/blog"
               className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
             >
               Blog
+            </a>
+            <a
+              href="/qa"
+              className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
+            >
+              Q&A
             </a>
             <ThemeToggle />
             <CtaButton href="/#top-crms" size="sm" className="hidden sm:inline-flex">

@@ -22,6 +22,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${BASE_URL}/compare`,
+      lastModified: new Date("2026-03-01"),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/blog`,
       lastModified: new Date("2026-03-01"),
       changeFrequency: "weekly",

@@ -12,6 +12,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { INDUSTRIES, getIndustryBySlug } from "@/lib/industries";
 import { CRMS, type Crm } from "@/lib/crms";
+import { getMedia, extractYouTubeId } from "@/lib/media";
 
 export function generateStaticParams() {
   return INDUSTRIES.map((i) => ({ slug: i.slug }));
@@ -44,6 +45,11 @@ export default async function IndustryPage(props: {
   if (!industry) notFound();
 
   const relevantCrms = getRelevantCrms(industry);
+  const media = getMedia("industry", industry.slug);
+  const youtubeId = media?.youtubeUrl
+    ? extractYouTubeId(media.youtubeUrl)
+    : industry.youtubeId ?? null;
+  const podcastUrl = media?.podcastUrl ?? industry.podcastUrl;
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -101,6 +107,12 @@ export default async function IndustryPage(props: {
               Reviews
             </a>
             <a
+              href="/compare"
+              className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
+            >
+              Compare
+            </a>
+            <a
               href="/industries"
               className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
             >
@@ -111,6 +123,12 @@ export default async function IndustryPage(props: {
               className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
             >
               Blog
+            </a>
+            <a
+              href="/qa"
+              className="hidden text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white sm:inline"
+            >
+              Q&A
             </a>
             <ThemeToggle />
             <CtaButton href="/#top-crms" size="sm" className="hidden sm:inline-flex">
@@ -154,56 +172,13 @@ export default async function IndustryPage(props: {
             </div>
           </div>
 
-          {/* Video + Audio: only rendered when content exists */}
-          {(industry.youtubeId || industry.podcastUrl) && (
-            <div className={`grid gap-4 ${industry.youtubeId && industry.podcastUrl ? "sm:grid-cols-2" : ""}`}>
-              {industry.youtubeId && (
-                <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
-                  <div className="relative aspect-video">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${industry.youtubeId}`}
-                      title={`${industry.title} CRM deep dive`}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="absolute inset-0 h-full w-full"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <div className="text-sm font-semibold text-slate-900">
-                      Video: CRM for {industry.title}
-                    </div>
-                    <p className="mt-1 text-sm text-slate-600">
-                      Watch our deep dive into what makes a CRM work for {industry.title.toLowerCase()} teams.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {industry.podcastUrl && (
-                <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-                  <div className="flex items-start gap-4">
-                    <div className="rounded-2xl bg-accent-50 p-3 text-accent">
-                      <Headphones className="h-6 w-6" aria-hidden="true" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="text-sm font-semibold text-slate-900">
-                        Podcast: {industry.title} CRM Guide
-                      </div>
-                      <p className="mt-1 text-sm text-slate-600">
-                        Listen to our audio breakdown of CRM strategies for {industry.title.toLowerCase()}.
-                      </p>
-                    </div>
-                  </div>
-                  <audio
-                    controls
-                    className="mt-4 w-full"
-                    preload="metadata"
-                  >
-                    <source src={industry.podcastUrl} type="audio/mpeg" />
-                    Your browser does not support the audio element.
-                  </audio>
-                </div>
-              )}
+          {media?.image && (
+            <div className="overflow-hidden rounded-3xl border border-slate-200 shadow-sm dark:border-slate-700">
+              <img
+                src={media.image}
+                alt={`Best AI CRM for ${industry.title}`}
+                className="h-auto w-full object-cover"
+              />
             </div>
           )}
 
@@ -216,6 +191,29 @@ export default async function IndustryPage(props: {
               />
             </div>
           </section>
+
+          {youtubeId && (
+            <section className="mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+              <div className="relative aspect-video">
+                <iframe
+                  src={`https://www.youtube.com/embed/${youtubeId}`}
+                  title={`${industry.title} CRM deep dive`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 h-full w-full"
+                />
+              </div>
+              <div className="p-4">
+                <div className="text-sm font-semibold text-slate-900">
+                  Video: CRM for {industry.title}
+                </div>
+                <p className="mt-1 text-sm text-slate-600">
+                  Watch our deep dive into what makes a CRM work for{" "}
+                  {industry.title.toLowerCase()} teams.
+                </p>
+              </div>
+            </section>
+          )}
 
           {/* CRM Silo: Top Tools for this Industry */}
           <section id="top-tools" className="scroll-mt-24">
@@ -289,6 +287,33 @@ export default async function IndustryPage(props: {
               ))}
             </div>
           </section>
+
+          {podcastUrl && (
+            <section className="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+              <div className="flex items-start gap-4">
+                <div className="rounded-2xl bg-accent-50 p-3 text-accent">
+                  <Headphones className="h-6 w-6" aria-hidden="true" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-semibold text-slate-900">
+                    Podcast: {industry.title} CRM Guide
+                  </div>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Listen to our audio breakdown of CRM strategies for{" "}
+                    {industry.title.toLowerCase()}.
+                  </p>
+                </div>
+              </div>
+              <audio
+                controls
+                className="mt-4 w-full"
+                preload="metadata"
+              >
+                <source src={podcastUrl} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            </section>
+          )}
 
           {/* Browse other industries */}
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-8">

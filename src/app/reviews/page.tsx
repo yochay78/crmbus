@@ -47,6 +47,12 @@ export default function ReviewsIndexPage() {
               Top CRMs
             </a>
             <a
+              href="/compare"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Compare
+            </a>
+            <a
               href="/industries"
               className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
             >
@@ -57,6 +63,12 @@ export default function ReviewsIndexPage() {
               className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
             >
               Blog
+            </a>
+            <a
+              href="/qa"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Q&A
             </a>
             <ThemeToggle />
             <CtaButton href="/#top-crms" size="sm" className="hidden sm:inline-flex">
@@ -79,9 +91,8 @@ export default function ReviewsIndexPage() {
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {CRMS.map((crm) => (
-            <a
+            <div
               key={crm.slug}
-              href={`/reviews/${crm.slug}`}
               className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700 dark:bg-slate-800"
             >
               <div className="text-base font-semibold text-slate-900">
@@ -90,9 +101,12 @@ export default function ReviewsIndexPage() {
               <div className="mt-2 text-sm text-slate-600">
                 Best for {crm.bestFor}
               </div>
-              <div className="mt-4 text-sm font-medium text-primary group-hover:text-primary-hover">
+              <a
+                href={`/reviews/${crm.slug}`}
+                className="mt-4 inline-flex text-sm font-medium text-primary group-hover:text-primary-hover"
+              >
                 Read full review →
-              </div>
+              </a>
               <div className="mt-6 flex flex-col gap-2">
                 <CtaButton
                   href={`/go/${crm.slug}`}
@@ -112,7 +126,7 @@ export default function ReviewsIndexPage() {
                   Read review
                 </CtaButton>
               </div>
-            </a>
+            </div>
           ))}
         </div>
 

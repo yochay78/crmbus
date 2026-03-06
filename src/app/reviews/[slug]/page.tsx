@@ -11,7 +11,11 @@ import {
 import { CtaButton } from "@/components/CtaButton";
 import { JsonLd } from "@/components/JsonLd";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { RedCirclePlayer } from "@/components/RedCirclePlayer";
 import { CRMS, LONG_REVIEWS, type CrmSlug, getCrmBySlug } from "@/lib/crms";
+import { getMedia, extractYouTubeId, parseRedcircleIds } from "@/lib/media";
+
+const MAX_FAQS = 20;
 
 export function generateStaticParams(): { slug: CrmSlug }[] {
   return CRMS.map((c) => ({ slug: c.slug }));
@@ -44,6 +48,103 @@ export default async function ReviewPage(props: {
     ...review.sections.map((s) => ({ id: s.id, label: s.title })),
     { id: "faq", label: "FAQ" },
   ];
+
+  const media = getMedia("review", crm.slug);
+  const youtubeId = media?.youtubeUrl
+    ? extractYouTubeId(media.youtubeUrl)
+    : null;
+  const podcastIds = media?.podcastUrl
+    ? parseRedcircleIds(media.podcastUrl)
+    : null;
+
+  const faqBase = review.faqs ?? [];
+  const extraFaqs = [
+    {
+      q: `Who is ${crm.name} really best for?`,
+      a: `Best fit is typically ${crm.bestFor.toLowerCase()} — teams that match that profile will get the fastest ROI from ${crm.name}.`,
+    },
+    {
+      q: `How long does it take to evaluate ${crm.name}?`,
+      a: `Most teams can get a realistic feel for ${crm.name} in one focused trial period (${crm.trialPeriod}), as long as they run a real pipeline through it instead of a fake demo.`,
+    },
+    {
+      q: `What should I set up first in ${crm.name}?`,
+      a: `Start with one clean pipeline that matches your actual sales stages, then connect a real lead source and work those deals end-to-end.`,
+    },
+    {
+      q: `Does ${crm.name} work for very small teams?`,
+      a: `Yes — as long as your team is willing to keep the pipeline updated. Even a team of 1–3 people can benefit from structured deals and tasks.`,
+    },
+    {
+      q: `Does ${crm.name} scale to larger teams?`,
+      a: `It scales reasonably well for its target use case. Once you reach dozens of reps and multiple regions, you may want to compare it with more enterprise-focused options.`,
+    },
+    {
+      q: `How opinionated is ${crm.name}'s workflow?`,
+      a: `${crm.name} provides a suggested way of working but still lets you customize stages, fields, and automations to fit your process.`,
+    },
+    {
+      q: `What AI or automation feature stands out in ${crm.name}?`,
+      a: `The signature capability is ${crm.aiFeature}. That is usually the feature that moves the needle most if you lean into it during the trial.`,
+    },
+    {
+      q: `Can I start without importing my entire database?`,
+      a: `Yes — and you probably should. Import a focused slice of active deals and contacts so you can evaluate ${crm.name} without a messy migration.`,
+    },
+    {
+      q: `How does pricing for ${crm.name} compare to similar tools?`,
+      a: `${crm.name} starts around ${crm.pricingStart}. When comparing cost, factor in which features it can replace (email tools, calling, automation, reporting).`,
+    },
+    {
+      q: `Is ${crm.name} easy for reps to adopt?`,
+      a: `Most reps can get comfortable with the basics in a week or less, especially if you keep the first pipeline configuration simple and focused.`,
+    },
+    {
+      q: `What are common reasons ${crm.name} is a bad fit?`,
+      a: `It can be a poor fit if your processes are either extremely simple (spreadsheets might suffice) or extremely complex and heavily customized.`,
+    },
+    {
+      q: `How good is reporting and analytics in ${crm.name}?`,
+      a: `Reporting is strong enough for most ${crm.bestFor.toLowerCase()} teams, covering pipeline, win rates, and activity. Very advanced BI still benefits from exporting into external tools.`,
+    },
+    {
+      q: `Does ${crm.name} integrate well with other tools?`,
+      a: `${crm.name} integrates with common email, calendar, and marketing systems. For niche tools, you may rely on Zapier or native marketplace apps.`,
+    },
+    {
+      q: `What support can I expect from ${crm.name}?`,
+      a: `Support quality is generally solid for onboarding questions and troubleshooting. For complex architecture or heavy customization, you may need partner or consultant help.`,
+    },
+    {
+      q: `Can I customize fields and pipelines in ${crm.name}?`,
+      a: `Yes — you can customize deal stages, fields, and in most cases automations so the CRM mirrors your real-world process rather than forcing you into a generic template.`,
+    },
+    {
+      q: `How should I train my team on ${crm.name}?`,
+      a: `Run one short kickoff to explain your pipeline stages, required fields, and daily habits (log notes, move stages, complete tasks). Then reinforce with weekly pipeline reviews.`,
+    },
+    {
+      q: `What data should I track in ${crm.name} that I might be missing now?`,
+      a: `At minimum: source, stage, owner, next step, and close reason. Those fields alone make your reporting and future optimization much more powerful.`,
+    },
+    {
+      q: `How does ${crm.name} handle multiple pipelines or products?`,
+      a: `Most teams can model multiple pipelines or product lines with separate boards or stages. If your structure is very complex, test that carefully during the trial.`,
+    },
+    {
+      q: `What is the biggest mistake teams make when evaluating ${crm.name}?`,
+      a: `Trying to rebuild their entire tech stack on day one. A focused trial with one pipeline and one clear success metric tells you much more.`,
+    },
+    {
+      q: `How do I know if ${crm.name} is working for us after 90 days?`,
+      a: `Look at lead response times, stage conversion rates, and close rates. If those improve while admin time stays steady or drops, ${crm.name} is doing its job.`,
+    },
+  ];
+
+  const faqsToRender =
+    faqBase.length >= MAX_FAQS
+      ? faqBase.slice(0, MAX_FAQS)
+      : [...faqBase, ...extraFaqs].slice(0, MAX_FAQS);
 
   const softwareJsonLd = {
     "@context": "https://schema.org",
@@ -118,6 +219,12 @@ export default async function ReviewPage(props: {
               Reviews
             </a>
             <a
+              href="/compare"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Compare
+            </a>
+            <a
               href="/industries"
               className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
             >
@@ -128,6 +235,12 @@ export default async function ReviewPage(props: {
               className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
             >
               Blog
+            </a>
+            <a
+              href="/qa"
+              className="text-sm font-medium text-slate-700 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+            >
+              Q&A
             </a>
             <ThemeToggle />
             <CtaButton
@@ -216,6 +329,16 @@ export default async function ReviewPage(props: {
               </div>
             </div>
           </div>
+
+          {media?.image && (
+            <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+              <img
+                src={media.image}
+                alt={`${crm.name} hero`}
+                className="h-auto w-full object-cover"
+              />
+            </div>
+          )}
 
           <div className="grid gap-6 lg:grid-cols-12">
             <aside className="lg:col-span-4">
@@ -309,6 +432,20 @@ export default async function ReviewPage(props: {
                 </div>
               </section>
 
+              {youtubeId && (
+                <section className="mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                  <div className="relative aspect-video">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${youtubeId}`}
+                      title={`${crm.name} review video`}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute inset-0 h-full w-full"
+                    />
+                  </div>
+                </section>
+              )}
+
               {review.sections.map((section) => (
                 <section
                   key={section.id}
@@ -336,6 +473,18 @@ export default async function ReviewPage(props: {
                 </section>
               ))}
 
+              {podcastIds && (
+                <section className="mt-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800">
+                  <h2 className="mb-3 text-base font-semibold text-slate-900 dark:text-white">
+                    Listen to the Podcast
+                  </h2>
+                  <RedCirclePlayer
+                    showId={podcastIds.showId}
+                    episodeId={podcastIds.episodeId}
+                  />
+                </section>
+              )}
+
               <section
                 id="faq"
                 className="mt-6 scroll-mt-24 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-700 dark:bg-slate-800 sm:p-8"
@@ -344,7 +493,7 @@ export default async function ReviewPage(props: {
                   FAQ
                 </h2>
                 <div className="mt-4 divide-y divide-slate-200">
-                  {review.faqs.map((f) => (
+                  {faqsToRender.map((f) => (
                     <details key={f.q} className="py-4">
                       <summary className="cursor-pointer text-sm font-semibold text-slate-900">
                         {f.q}
