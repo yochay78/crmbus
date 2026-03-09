@@ -43,6 +43,10 @@ export const MEDIA: MediaEntry[] = [
   {
     section: "blog",
     slug: "does-hubspot-have-ai-lead-scoring",
+    image: "/media/blog-does-hubspot-have-ai-lead-scoring-hero.png",
+    youtubeUrl: "https://youtu.be/IVTEPl0K_Wc",
+    podcastUrl:
+      "https://redcircle.com/shows/3c30275c-667f-4329-94b0-74b210c86bd4/episodes/b29aa64d-5e19-4b84-9187-bbb008108980",
   },
   {
     section: "blog",
@@ -103,6 +107,30 @@ export const MEDIA: MediaEntry[] = [
     youtubeUrl: "https://youtu.be/dwIPNkMqXzg",
     podcastUrl:
       "https://redcircle.com/shows/3c30275c-667f-4329-94b0-74b210c86bd4/episodes/d5af87a8-08de-43b3-981a-1297a4c3be13",
+  },
+  {
+    section: "review",
+    slug: "crmone",
+    image: "/media/review-crmone-hero.png",
+    youtubeUrl: "https://youtu.be/YhjClf5ZG4o",
+    podcastUrl:
+      "https://redcircle.com/shows/3c30275c-667f-4329-94b0-74b210c86bd4/episodes/54a8c9d3-0020-44c6-833d-d7dfb7d8b953",
+  },
+  {
+    section: "review",
+    slug: "centripe",
+    image: "/media/review-centripe-hero.png",
+    youtubeUrl: "https://youtu.be/boLNd4TonFc",
+    podcastUrl:
+      "https://redcircle.com/shows/3c30275c-667f-4329-94b0-74b210c86bd4/episodes/bc164cb5-d8e8-449c-afa6-7004f58014b8",
+  },
+  {
+    section: "industry",
+    slug: "real-estate",
+    image: "/media/industry-real-estate-hero.png",
+    youtubeUrl: "https://youtu.be/HIDYX1HS0Qo",
+    podcastUrl:
+      "https://redcircle.com/shows/3c30275c-667f-4329-94b0-74b210c86bd4/episodes/ac115cc0-7c82-47a1-ae3d-07bd774e0cd2",
   },
 ];
 
