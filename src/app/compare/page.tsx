@@ -81,6 +81,18 @@ export default function ComparePage() {
           </div>
         </div>
 
+        <div className="mt-8 aspect-video w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-950/90 shadow-lg dark:border-slate-700">
+          <iframe
+            className="h-full w-full"
+            src="https://www.youtube.com/embed/MZYUl420Uig"
+            title="CRMBUS CRM comparison"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          />
+        </div>
+
         <CompareCrmTable
           crms={CRMS}
           featuredSlugs={FEATURED_TOP_SLUGS}

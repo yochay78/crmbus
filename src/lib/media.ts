@@ -35,6 +35,7 @@ export const MEDIA: MediaEntry[] = [
   {
     section: "blog",
     slug: "highlevel-vs-hubspot",
+    youtubeUrl: "https://youtu.be/d_FkJBclZNg",
   },
   {
     section: "blog",
