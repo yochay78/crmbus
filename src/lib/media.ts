@@ -35,7 +35,10 @@ export const MEDIA: MediaEntry[] = [
   {
     section: "blog",
     slug: "highlevel-vs-hubspot",
+    image: "/media/blog-highlevel-vs-hubspot-hero.png",
     youtubeUrl: "https://youtu.be/d_FkJBclZNg",
+    podcastUrl:
+      "https://redcircle.com/shows/3c30275c-667f-4329-94b0-74b210c86bd4/episodes/cbd3c02e-1159-4204-94c7-4723eb3bf14e",
   },
   {
     section: "blog",
